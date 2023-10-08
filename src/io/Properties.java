@@ -1,5 +1,6 @@
 package io;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,19 +14,22 @@ import java.util.ResourceBundle;
  *
  */
 public class Properties {
-    
+
     /* プロパティファイルから読み込んだ値を格納する変数 */
     /** プロパティファイルから読み込まれる、データベースのファイル名 */
-    private String databaseFile;
+    private final String databaseFile;
 
     /** プロパティファイルから読み込まれる、ゲームのタイトル */
-    private String gameTitle;
+    private final String gameTitle;
 
     /** プロパティファイルから読み込まれる、出題する問題の個数 */
-    private int questionNum;
+    private final int questionNum;
 
     /** プロパティファイルから読み込まれる、選択肢の個数 */
-    private int selectNum;
+    private final int selectNum;
+
+    /** プロパティファイルから読み込まれる、メイン画面のサイズ */
+    private final Dimension mainFrameDim;
 
     /**
      * プロパティファイルを読み込み、値を設定する
@@ -47,8 +51,12 @@ public class Properties {
         gameTitle = rb.getString("game_title");
         questionNum = Integer.parseInt(rb.getString("question_num"));
         selectNum = Integer.parseInt(rb.getString("select_num"));
+        
+        mainFrameDim = new Dimension(
+                Integer.parseInt(rb.getString("main_frame_width")),
+                Integer.parseInt(rb.getString("main_frame_height")));
     }
-
+    
     /**
      * データベースのファイル名を返す
      * @return データベースのファイル名の文字列
@@ -79,5 +87,14 @@ public class Properties {
      */
     public int getSelectNum() {
         return selectNum;
+    }
+    
+
+    /**
+     * プロパティファイルから読み込まれたメイン画面のサイズ
+     * @return メイン画面のサイズ
+     */
+    public Dimension getMainFrameDim() {
+        return mainFrameDim;
     }
 }

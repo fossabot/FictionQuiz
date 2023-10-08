@@ -10,6 +10,7 @@ import java.util.Queue;
 
 import io.DatabaseSqlite3;
 import io.Output;
+import io.Properties;
 
 /**
  * クイズゲームを管理・処理するクラス
@@ -17,42 +18,36 @@ import io.Output;
  *
  */
 public class QuizGame {
+    /** 作品リスト */
+    private final List<Sakuhin> sakuhinList;
+
+    /** 作者リスト */
+    private final CodeList authorList;
+
+    /** 作成したクイズ情報を格納するキュー（FIFOで管理） */
+    private final Queue<Question> quizQueue;
+
+    /** データベース情報 */
+    private final DatabaseSqlite3 db;
+
+    /** 現在扱っている問題を格納する変数 */
+    private Question currentQuestion;
+
     /** 現在の出題数を表す変数 */
     private int currentQuestionNum = 0;
 
     /** 現在の正答数を表す変数 */
     private int currentAnswerNum = 0;
 
-    /** 現在扱っている問題を格納する変数 */
-    private Question currentQuiz = null;
-
-    /** データベース情報を格納する変数 */
-    DatabaseSqlite3 db = null;
-
-    /** 作品リスト */
-    private List<Sakuhin> sakuhinList = new ArrayList<Sakuhin>();
-
-    /** 作者リスト */
-    //    private List<String> authorList = new ArrayList<String>();
-    private List<Code> authorList = new ArrayList<Code>();
-
-    /** 作成したクイズ情報を格納するキュー（FIFOで管理） */
-    private Queue<Question> quizQueue = new ArrayDeque<Question>();
-
     /**
      * クイズゲームの初期化を行う。ここではデータベースに接続する。
      * @param dbFilePath データベースのファイルパス
      */
     public QuizGame(String dbFilePath) {
+        sakuhinList = new ArrayList<Sakuhin>();
+        authorList = new CodeList();
+        quizQueue = new ArrayDeque<Question>();
         db = new DatabaseSqlite3(dbFilePath);
-    }
-
-    /**
-     * 作成されている問題の個数を返す
-     * @return 作成された問題の個数
-     */
-    public int getQuizQueuSize() {
-        return quizQueue.size();
     }
 
     /**
@@ -70,35 +65,35 @@ public class QuizGame {
     public int getCurrentAnswerNum() {
         return currentAnswerNum;
     }
-    
+
     /**
      * 現在のクイズを返す
      * @return 現在のクイズ
      */
     public Question getCurrentQuestion() {
-        return currentQuiz;
+        return currentQuestion;
     }
-    
+
     /**
      * 作品ジャンルのリストを作成して返す
      * @return 作品ジャンルのリスト
      */
-    public List<Code> getCategoryCodes() {
-        List<Code> codes = new ArrayList<Code>();
+    public CodeList getCategoryCodes() {
+//        List<Code> codes = new ArrayList<Code>();
+        CodeList codeList = new CodeList();
         ResultSet rs;
 
         rs = db.executeQuery("SELECT * FROM CategoryTable");
 
         try {
             while (rs.next()) {
-                codes.add(new Code(Integer.parseInt(rs.getString("id")),
-                        rs.getString("category")));
+                codeList.add(Integer.parseInt(rs.getString("id")), rs.getString("category"));
             }
         } catch (NumberFormatException | SQLException e) {
             e.printStackTrace();
         }
 
-        return codes;
+        return codeList;
     }
 
     /**
@@ -123,9 +118,9 @@ public class QuizGame {
                 int authorCode = rs.getInt("author_code");
 
                 sakuhinList.add(new Sakuhin(title, authorName));
-
-                if (!(ControlCodeList.containsByCode(authorList, authorCode))) {
-                    authorList.add(new Code(authorCode, authorName)); // リストに重複が発生しないように追加する。
+                
+                if(!(authorList.containsByCode(authorCode))) {    // リストに重複が発生しないように追加する。
+                    authorList.add(authorCode, authorName);
                 }
             }
         } catch (SQLException e) {
@@ -136,11 +131,16 @@ public class QuizGame {
     }
 
     /**
-     * クイズを生成する
-     * @param quesitonNum 作成するクイズの個数
-     * @param selectNum 作成する選択肢の数
+     * 出題するクイズを作成する
+     * @param prop プロパティファイルの情報
+     * @return 作成したクイズの問題数
      */
-    public void generateQuiz(int quesitonNum, int selectNum) {
+    public int generateQuiz(Properties prop) {
+        int questionNum = 0; // 出題する問題数
+
+        Output.printlnAsInfo("出題するクイズを生成します。");
+
+        //        generateQuizQueue(prop.questionNum, prop.selectNum);
         if (sakuhinList.isEmpty()) {
             throw new NullPointerException("作品リストが作成されていません。");
         }
@@ -155,25 +155,41 @@ public class QuizGame {
 
         Collections.shuffle(sakuhinList);
 
-        for (int i = 0; i < sakuhinList.size() && i < quesitonNum; i++) {
+        for (int i = 0; i < sakuhinList.size() && i < prop.getQuestionNum(); i++) {
             quizQueue.add(new Question(sakuhinList.get(i).getTitle(),
                     sakuhinList.get(i).getAuthor(),
-                    authorList, selectNum));
+                    authorList, prop.getSelectNum()));
         }
+
+        // 出題する問題数を設定する
+        // 原則はプロパティファイルの値を設定するが、
+        // 作成された問題が設定された問題数よりも少ない場合は、作成された問題数を出題数として設定する。
+        if (quizQueue.size() < prop.getQuestionNum()) {
+            questionNum = quizQueue.size();
+            Output.printlnAsWarning("データベース件数が少ないため、出題数は変更されました。出題数： " + questionNum);
+        } else {
+            questionNum = prop.getQuestionNum();
+        }
+
+        Output.printlnAsInfo("クイズの準備が完了しました。出題数：" + questionNum);
+        System.out.println("");
+
+        return questionNum;
     }
 
     /**
-     * クイズを {@code currentQuiz} にセットする
-     * @return クイズがセットされたときは {@code true} 、キューが空などでセットできなかったときは {@code false} を返す。
+     * 次のクイズをセットする。
+     * 出題予定のクイズリストから１問取り出し、{@code currentQuiz} にセットする
+     * @return クイズがセットされたときは {@code true} 、次に出題するクイズがない場合は {@code false} を返す。
      */
-    public Boolean setQuiz() {
+    public Boolean nextQuiz() {
         if (quizQueue.isEmpty()) {
             Output.printlnAsError("問題リストが空のため、出題することができません。\nクイズキューを再生成する必要があります。");
             return false;
         }
 
         currentQuestionNum++;
-        currentQuiz = quizQueue.poll();
+        currentQuestion = quizQueue.poll();
 
         return true;
     }
@@ -187,19 +203,17 @@ public class QuizGame {
         String answerString;
 
         try {
-            answerString = currentQuiz.getSelectString(selectNum - 1);
+            answerString = currentQuestion.getSelectString(selectNum - 1);
         } catch (Exception e) {
             Output.printlnAsError("想定されていない選択肢番号が入力されました。");
             return false;
         }
 
         // 正解か判定する
-        if (answerString.equals(currentQuiz.getAnswer())) {
-            Output.printlnAsCollect();
+        if (answerString.equals(currentQuestion.getAnswer())) {
             currentAnswerNum++;
             return true;
         } else {
-            Output.printlnAsIncollect();
             return false;
         }
     }

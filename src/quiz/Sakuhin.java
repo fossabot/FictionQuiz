@@ -8,10 +8,10 @@ package quiz;
 public class Sakuhin {
 
     /** 作品のタイトルを表す変数 */
-    private String titleString;
+    private final String titleString;
 
     /** 作品の作者を表す変数 */
-    private String authorString;
+    private final String authorString;
 
     /**
      * 作品を定義する

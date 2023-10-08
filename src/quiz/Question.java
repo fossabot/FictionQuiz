@@ -10,16 +10,16 @@ import java.util.List;
  *
  */
 public class Question {
-    
+
     /** 問題を表す変数 */
-    private String questionString;
+    private final String questionString;
 
     /** 解答を表す変数 */
-    private String answerString;
+    private final String answerString;
 
     /** 選択肢リストを格納する変数 */
-    private List<String> selecStrings = new ArrayList<String>();
-    
+    private final List<String> selecStrings;
+
     /**
      * 問題、解答、選択肢を作成する。
      * 選択肢は、解答 {@code answer} と作者リスト {@code authorList} を元に作成する。
@@ -28,26 +28,25 @@ public class Question {
      * @param authorList 作者リスト
      * @param selectNum 作成する選択肢の個数
      */
-    public Question(String question, String answer, List<Code> authorList, int selectNum) {
+    public Question(String question, String answer, CodeList authorList, int selectNum) {
         this.questionString = question;
-        this.answerString   = answer;
-        
-        Collections.shuffle(authorList);
-        
-        // アタリを選択肢に追加する
-        selecStrings.add(answer);
-        
-        // ハズレを選択肢に追加する
-        for (int i = 0; selecStrings.size() < selectNum && i < authorList.size(); i++) {
-            String authorString = authorList.get(i).getEntry();
+        this.answerString = answer;
+
+        // 選択肢の作成
+        selecStrings = new ArrayList<String>();
+        authorList.shuffle();
+
+        selecStrings.add(answer); // アタリを選択肢に追加する
+
+        for (int i = 0; selecStrings.size() < selectNum && i < authorList.size(); i++) { // ハズレを選択肢に追加する
+            String authorString = authorList.getEntry(i);
 
             if (!(selecStrings.contains(authorString))) {
-                selecStrings.add(authorString);    // リストに重複が発生しないように追加する。
+                selecStrings.add(authorString); // リストに重複が発生しないように追加する。
             }
         }
 
-        // 選択肢１が必ず答えになるため、選択肢を並び替える。
-        Collections.shuffle(selecStrings);
+        Collections.shuffle(selecStrings); // 先頭の選択肢が必ず答えになるため、選択肢を並び替える。
     }
 
     /**
@@ -83,4 +82,3 @@ public class Question {
         return selecStrings.get(i);
     }
 }
-
