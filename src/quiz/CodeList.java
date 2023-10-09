@@ -71,7 +71,6 @@ public class CodeList {
     
     /**
     * コード番号に対応する要素の文字列を返す。
-    * @param codeList コード {@code Code} 型のリスト
     * @param code 検索するコード番号
     * @return 該当する要素の文字列
     */
@@ -86,7 +85,6 @@ public class CodeList {
 
     /**
      * 要素 {@code entry} に対応するコード番号を返す。
-     * @param codeList コード {@code Code} 型のリスト
      * @param entry 検索する要素の文字列
      * @return 該当するコード番号
      */
@@ -101,7 +99,6 @@ public class CodeList {
 
     /**
      * コード番号がリストに含まれているか
-     * @param codeList コード {@code Code} 型のリスト
      * @param code 検索するコード番号
      * @return リストに存在する場合は {@code true} 、リストに存在しない場合は {@code false} を返す。
      */
@@ -116,7 +113,6 @@ public class CodeList {
 
     /**
      * 要素 {@code entry} がリストに含まれているか
-     * @param codeList コード {@code Code} 型のリスト
      * @param entry 検索する要素の文字列
      * @return リストに存在する場合は {@code true} 、リストに存在しない場合は {@code false} を返す。
      */
@@ -128,46 +124,5 @@ public class CodeList {
         }
 
         return false;
-    }
-}
-
-
-/**
- * コード番号と、それに対応する文字列を紐付けるクラス
- * @author komoto
- *
- */
-class Code {
-    
-    /** コード番号を表す変数 */
-    private int id;
-
-    /** コードに対応する文字列を表す変数 */
-    private String entry;
-
-    /**
-     * コード番号と文字列を設定する
-     * @param id コード番号
-     * @param entry コードに対応する要素
-     */
-    public Code(int id, String entry) {
-        this.id    = id;
-        this.entry = entry;
-    }
-
-    /**
-     * コード番号を返す
-     * @return コード番号 {@code id}
-     */
-    public int getId() {
-        return id;
-    }
-
-    /**
-     * エントリーの値を返す
-     * @return エントリー {@code entry}
-     */
-    public String getEntry() {
-        return entry;
     }
 }

@@ -2,11 +2,12 @@ package cui;
 
 import java.util.Scanner;
 
-import common.CommonMethods;
-import common.ConstantValue;
-import quiz.CodeList;
+import quiz.CategoryList;
+import quiz.GameValues;
 import quiz.Question;
 import quiz.QuizGame;
+import io.CommonMethods;
+import io.DatabaseSqlite3;
 import io.Output;
 import io.Properties;
 
@@ -17,19 +18,13 @@ import io.Properties;
  *
  */
 public class CuiMain {
-
-    /** プロパティファイルの読込み結果を格納する変数 */
-    private static Properties prop;
-
-    /** クイズゲームの管理データを格納する変数 */
-    private static QuizGame quizGame;
-
-    /** ジャンルのコード表を格納する変数 */
-//    private static List<Code> categoryCodes;
-    private static CodeList categoryCodes;
+    private static GameValues gameValues;
 
     /** 標準入力のスキャナーを格納する変数 */
     private static Scanner scanner;
+
+    /** クイズゲームの管理データを格納する変数 */
+    private static QuizGame quizGame;
 
     /**
      * 「作品クイズ」のゲーム全体の処理を行う。
@@ -37,18 +32,28 @@ public class CuiMain {
      */
     public static void main(String[] args) {
         scanner = new Scanner(System.in);
-        prop = new Properties(ConstantValue.RES_DIR_PATH, ConstantValue.PROPERTIES_FILE);
+        gameValues = new GameValues();
+        gameValues.setProperties();
+        Properties prop = gameValues.getProperties();
 
         System.out.println(prop.getGameTitle());
         System.out.println("");
 
-        quizGame = new QuizGame(ConstantValue.RES_DIR_PATH + "/" + prop.getDatabaseFile());
-        categoryCodes = quizGame.getCategoryCodes();
-        quizGame.generateSakuhinList(setCategoryOfQuiz());
+        DatabaseSqlite3 db = new DatabaseSqlite3(gameValues.getResDirPath() + "/" + prop.getDatabaseFile());
+        CategoryList categoryList = new CategoryList(db);
+        gameValues.setCategoryCodes(categoryList);
+        
+        quizGame = new QuizGame();
 
         while (true) {
-            Output.printlnAsInfo("クイズを準備します。");
-            int questionNum = quizGame.generateQuiz(prop);
+            int categoryId, questionNum;
+
+            // クイズジャンルの選択
+            categoryId = selectQuizCategory();
+            quizGame.generateSakuhinList(db, categoryId);
+
+            // 問題の生成
+            questionNum = quizGame.generateQuiz(prop);
 
             // クイズの実行
             for (int i = 0; i < questionNum; i++) {
@@ -65,7 +70,7 @@ public class CuiMain {
             System.out.println("");
 
             // 再挑戦するかを確認する
-            System.out.println("同じジャンルの問題に再挑戦しますか？（y：はい / n：いいえ）：");
+            System.out.println("再挑戦しますか？（y：はい / n：いいえ）：");
             Output.printAskWithBoolen("再挑戦？");
 
             if (scanner.next().equals("y")) {
@@ -76,6 +81,7 @@ public class CuiMain {
         }
 
         System.out.println("ゲームを終了します。");
+        db.disconnectDB();
         scanner.close();
     }
 
@@ -83,9 +89,9 @@ public class CuiMain {
      * 出題するクイズのジャンルを設定する
      * @return 選択したジャンルのカテゴリーコード
      */
-    private static int setCategoryOfQuiz() {
+    private static int selectQuizCategory() {
         int inputNum; // 標準入力を数値型に変換した値
-        int categoryId;
+        CategoryList categoryCodes = gameValues.getCategoryCodes();
 
         while (true) {
             System.out.println("出題されるクイズのジャンルを選択してください。");
@@ -106,7 +112,7 @@ public class CuiMain {
             }
         }
 
-        categoryId = categoryCodes.getCode(inputNum - 1);
+        int categoryId = categoryCodes.getCode(inputNum - 1);
         Output.printlnAsInfo(
                 "クイズジャンルとして「" + categoryCodes.getEntryFromCode(categoryId) + "」が選択されました。");
 
@@ -118,10 +124,10 @@ public class CuiMain {
      */
     private static void nextQuiz() {
         int inputNum; // 標準入力を数値型に変換した値
+        Question question;
 
         quizGame.nextQuiz();
-
-        Question question = quizGame.getCurrentQuestion();
+        question = quizGame.getCurrentQuestion();
 
         // 出題
         while (true) {
@@ -130,8 +136,8 @@ public class CuiMain {
             System.out.printf("第 %d 問\n", quizGame.getCurrentQuestionNum());
             System.out.printf("「%s」の作者は誰でしょう？\n", question.getQuestion());
 
-            for (int j = 0; j < selectNum; j++) {
-                System.out.printf("%2d. %s\n", j + 1, question.getSelectString(j));
+            for (int i = 0; i < selectNum; i++) {
+                System.out.printf("%2d. %s\n", i + 1, question.getSelectString(i));
             }
 
             System.out.println("");

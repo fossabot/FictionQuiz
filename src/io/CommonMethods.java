@@ -1,6 +1,4 @@
-package common;
-
-import io.Output;
+package io;
 
 /**
  * プログラム全体で共有する関数を定義するクラス
@@ -8,7 +6,7 @@ import io.Output;
  *
  */
 public class CommonMethods {
-    
+
     /**
      * 範囲付きで文字列を数字に変換する
      * 文字列 {@code str} を数字に変換し、その数字が条件範囲（ {@code minNum} 以上、かつ {@code maxNum} 以下）に含まれるか確認する。
@@ -22,14 +20,14 @@ public class CommonMethods {
             int n = Integer.parseInt(str);
 
             if (n >= minNum && n <= maxNum) {
-                return n;             // 選択肢の範囲内
+                return n; // 選択肢の範囲内
             } else {
                 Output.printlnAsWarning("範囲外の数字が入力されました。");
-                return minNum - 1;    // 選択肢の範囲外
+                return minNum - 1; // 選択肢の範囲外
             }
         } catch (NumberFormatException e) {
             Output.printlnAsWarning("数字以外の文字が入力されました。");
-            return minNum - 1;        // 数字以外の文字
+            return minNum - 1; // 数字以外の文字
         }
     }
 }

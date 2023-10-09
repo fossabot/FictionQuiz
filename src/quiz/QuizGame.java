@@ -27,9 +27,6 @@ public class QuizGame {
     /** 作成したクイズ情報を格納するキュー（FIFOで管理） */
     private final Queue<Question> quizQueue;
 
-    /** データベース情報 */
-    private final DatabaseSqlite3 db;
-
     /** 現在扱っている問題を格納する変数 */
     private Question currentQuestion;
 
@@ -40,14 +37,12 @@ public class QuizGame {
     private int currentAnswerNum = 0;
 
     /**
-     * クイズゲームの初期化を行う。ここではデータベースに接続する。
-     * @param dbFilePath データベースのファイルパス
+     * クイズゲームの初期化を行う。
      */
-    public QuizGame(String dbFilePath) {
+    public QuizGame() {
         sakuhinList = new ArrayList<Sakuhin>();
         authorList = new CodeList();
         quizQueue = new ArrayDeque<Question>();
-        db = new DatabaseSqlite3(dbFilePath);
     }
 
     /**
@@ -75,34 +70,13 @@ public class QuizGame {
     }
 
     /**
-     * 作品ジャンルのリストを作成して返す
-     * @return 作品ジャンルのリスト
-     */
-    public CodeList getCategoryCodes() {
-//        List<Code> codes = new ArrayList<Code>();
-        CodeList codeList = new CodeList();
-        ResultSet rs;
-
-        rs = db.executeQuery("SELECT * FROM CategoryTable");
-
-        try {
-            while (rs.next()) {
-                codeList.add(Integer.parseInt(rs.getString("id")), rs.getString("category"));
-            }
-        } catch (NumberFormatException | SQLException e) {
-            e.printStackTrace();
-        }
-
-        return codeList;
-    }
-
-    /**
      * 指定されたジャンルの作品に関する問題を作成する。
      * まず、データベースに接続・抽出し、作品リスト {@code sakuhinList}と作者リスト {@code authorList}を作成する。
      * 次に、作品リスト {@code sakuhinList} を元に、クイズキュー {@code quizQueue} を作成する。
+     * @param db データベースの接続情報
      * @param categoryId 指定されたジャンルのコード番号（データベースの {@code CategoryTable} テーブルで定義）
      */
-    public void generateSakuhinList(int categoryId) {
+    public void generateSakuhinList(DatabaseSqlite3 db, int categoryId) {
         // 作品リストと作者リストを初期化する
         sakuhinList.clear();
         authorList.clear();
@@ -118,16 +92,14 @@ public class QuizGame {
                 int authorCode = rs.getInt("author_code");
 
                 sakuhinList.add(new Sakuhin(title, authorName));
-                
-                if(!(authorList.containsByCode(authorCode))) {    // リストに重複が発生しないように追加する。
+
+                if(!(authorList.containsByCode(authorCode))) { // リストに重複が発生しないように追加する。
                     authorList.add(authorCode, authorName);
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        db.disconnectDB();
     }
 
     /**
@@ -140,7 +112,6 @@ public class QuizGame {
 
         Output.printlnAsInfo("出題するクイズを生成します。");
 
-        //        generateQuizQueue(prop.questionNum, prop.selectNum);
         if (sakuhinList.isEmpty()) {
             throw new NullPointerException("作品リストが作成されていません。");
         }
@@ -183,15 +154,15 @@ public class QuizGame {
      * @return クイズがセットされたときは {@code true} 、次に出題するクイズがない場合は {@code false} を返す。
      */
     public Boolean nextQuiz() {
-        if (quizQueue.isEmpty()) {
-            Output.printlnAsError("問題リストが空のため、出題することができません。\nクイズキューを再生成する必要があります。");
+        if (!quizQueue.isEmpty()) {
+            // 次のクイズが存在する場合、取り出す
+            currentQuestionNum++;
+            currentQuestion = quizQueue.poll();
+            return true;
+        } else {
+            // 次のクイズが存在しない場合
             return false;
         }
-
-        currentQuestionNum++;
-        currentQuestion = quizQueue.poll();
-
-        return true;
     }
 
     /**
