@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
 
 import io.Output;
 
-
 public class GameController implements Initializable {
 
     /** クイズゲームの管理データを格納する変数 */
@@ -74,14 +73,14 @@ public class GameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        GameValues gameValues = Main.getInstance().getGameValues();
-        
         commentLabel.setPrefWidth(Main.getInstance().getPrimaryStage().getWidth() - 100);
-
+        
+        // クイズの生成
+        GameValues gameValues = Main.getInstance().getGameValues();
         QuizGame quizGame = new QuizGame();
         this.quizGame = quizGame;
 
-        quizGame.generateSakuhinList(Main.getInstance().getDB(), 2);
+        quizGame.generateSakuhinList(Main.getInstance().getDB(), Main.getInstance().getCategoryId());
 
         quizGame.generateQuiz(gameValues.getProperties());
         if (quizGame.nextQuiz()) {

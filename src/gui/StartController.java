@@ -14,7 +14,7 @@ public class StartController {
 
     @FXML
     void onStartButtonAction(ActionEvent event) {
-        Main.getInstance().gameView();
+        Main.getInstance().selectView();
     }
 
     @FXML

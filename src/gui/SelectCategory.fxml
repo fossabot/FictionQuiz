@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SelectCategoryController">
    <center>
       <GridPane alignment="CENTER" hgap="20.0" vgap="20.0" BorderPane.alignment="CENTER">
@@ -24,12 +23,8 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button mnemonicParsing="false" prefHeight="49.0" prefWidth="260.0" text="Button" />
-            <Button layoutX="10.0" layoutY="23.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="260.0" text="Button" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button layoutX="10.0" layoutY="23.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="260.0" text="Button" visible="false" GridPane.rowIndex="1" />
-            <Button layoutX="10.0" layoutY="23.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="260.0" text="Button" visible="false" GridPane.columnIndex="1" />
-            <Button layoutX="10.0" layoutY="99.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="260.0" text="Button" visible="false" GridPane.rowIndex="2" />
-            <Button layoutX="10.0" layoutY="180.0" mnemonicParsing="false" prefHeight="49.0" prefWidth="260.0" text="Button" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Button fx:id="categoryButton1" mnemonicParsing="false" onAction="#onCategoryButtonAction" prefHeight="49.0" prefWidth="260.0" text="Button" />
+            <Button fx:id="categoryButton2" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onCategoryButtonAction" prefHeight="49.0" prefWidth="260.0" text="Button" GridPane.columnIndex="1" />
          </children>
          <BorderPane.margin>
             <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />

@@ -42,17 +42,17 @@ public class CuiMain {
         DatabaseSqlite3 db = new DatabaseSqlite3(gameValues.getResDirPath() + "/" + prop.getDatabaseFile());
         CategoryList categoryList = new CategoryList(db);
         gameValues.setCategoryCodes(categoryList);
-        
-        quizGame = new QuizGame();
+
+        quizGame = new QuizGame(); /////////////// while内部にすべきか？ ///////////////
 
         while (true) {
             int categoryId, questionNum;
 
             // クイズジャンルの選択
             categoryId = selectQuizCategory();
-            quizGame.generateSakuhinList(db, categoryId);
 
             // 問題の生成
+            quizGame.generateSakuhinList(db, categoryId);
             questionNum = quizGame.generateQuiz(prop);
 
             // クイズの実行
