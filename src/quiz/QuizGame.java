@@ -18,8 +18,8 @@ import io.Properties;
  *
  */
 public class QuizGame {
-    /** 作品リスト */
-    private final List<Sakuhin> sakuhinList;
+    /** 創作物リスト */
+    private final List<Fiction> fictionList;
 
     /** 作者リスト */
     private final CodeList authorList;
@@ -40,7 +40,7 @@ public class QuizGame {
      * クイズゲームの初期化を行う。
      */
     public QuizGame() {
-        sakuhinList = new ArrayList<Sakuhin>();
+        fictionList = new ArrayList<Fiction>();
         authorList = new CodeList();
         quizQueue = new ArrayDeque<Question>();
     }
@@ -70,19 +70,19 @@ public class QuizGame {
     }
 
     /**
-     * 指定されたジャンルの作品に関する問題を作成する。
-     * まず、データベースに接続・抽出し、作品リスト {@code sakuhinList}と作者リスト {@code authorList}を作成する。
-     * 次に、作品リスト {@code sakuhinList} を元に、クイズキュー {@code quizQueue} を作成する。
+     * 指定されたジャンルに当てはまる創作物に関する問題を生成する。
+     * まず、データベースに接続・抽出し、創作物リスト {@code sakuhinList}と作者リスト {@code authorList}を作成する。
+     * 次に、創作物リスト {@code fictionList} を元に、クイズキュー {@code quizQueue} を作成する。
      * @param db データベースの接続情報
      * @param categoryId 指定されたジャンルのコード番号（データベースの {@code CategoryTable} テーブルで定義）
      */
-    public void generateSakuhinList(DatabaseSqlite3 db, int categoryId) {
-        // 作品リストと作者リストを初期化する
-        sakuhinList.clear();
+    public void generateFictionList(DatabaseSqlite3 db, int categoryId) {
+        // 創作物リストと作者リストを初期化する
+        fictionList.clear();
         authorList.clear();
 
-        String sql = "SELECT title_name, AuthorTable.id AS author_code, AuthorTable.name AS author_name FROM SakuhinTable "
-                + "INNER JOIN AuthorTable ON SakuhinTable.author_code = AuthorTable.id "
+        String sql = "SELECT title_name, AuthorTable.id AS author_code, AuthorTable.name AS author_name FROM FictionTable "
+                + "INNER JOIN AuthorTable ON FictionTable.author_code = AuthorTable.id "
                 + "WHERE category_code = " + categoryId;
         ResultSet rs = db.executeQuery(sql);
         try {
@@ -91,9 +91,9 @@ public class QuizGame {
                 String authorName = rs.getString("author_name");
                 int authorCode = rs.getInt("author_code");
 
-                sakuhinList.add(new Sakuhin(title, authorName));
+                fictionList.add(new Fiction(title, authorName));
 
-                if(!(authorList.containsByCode(authorCode))) { // リストに重複が発生しないように追加する。
+                if (!(authorList.containsByCode(authorCode))) { // リストに重複が発生しないように追加する。
                     authorList.add(authorCode, authorName);
                 }
             }
@@ -112,8 +112,8 @@ public class QuizGame {
 
         Output.printlnAsInfo("出題するクイズを生成します。");
 
-        if (sakuhinList.isEmpty()) {
-            throw new NullPointerException("作品リストが作成されていません。");
+        if (fictionList.isEmpty()) {
+            throw new NullPointerException("創作物リストが作成されていません。");
         }
 
         if (authorList.isEmpty()) {
@@ -124,11 +124,11 @@ public class QuizGame {
         currentAnswerNum = 0;
         quizQueue.clear();
 
-        Collections.shuffle(sakuhinList);
+        Collections.shuffle(fictionList);
 
-        for (int i = 0; i < sakuhinList.size() && i < prop.getQuestionNum(); i++) {
-            quizQueue.add(new Question(sakuhinList.get(i).getTitle(),
-                    sakuhinList.get(i).getAuthor(),
+        for (int i = 0; i < fictionList.size() && i < prop.getQuestionNum(); i++) {
+            quizQueue.add(new Question(fictionList.get(i).getTitle(),
+                    fictionList.get(i).getAuthor(),
                     authorList, prop.getSelectNum()));
         }
 

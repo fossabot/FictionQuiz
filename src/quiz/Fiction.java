@@ -5,7 +5,7 @@ package quiz;
  * @author komoto
  *
  */
-public class Sakuhin {
+public class Fiction {
 
     /** 作品のタイトルを表す変数 */
     private final String titleString;
@@ -18,7 +18,7 @@ public class Sakuhin {
      * @param titleString 作品のタイトル
      * @param authorString 作品の作者
      */
-    public Sakuhin(String titleString, String authorString) {
+    public Fiction(String titleString, String authorString) {
         this.titleString = titleString;
         this.authorString = authorString;
     }

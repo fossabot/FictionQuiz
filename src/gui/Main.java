@@ -9,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 
 import java.awt.Dimension;
 
-import quiz.CategoryList;
 import quiz.GameValues;
 import io.DatabaseSqlite3;
 import io.Output;

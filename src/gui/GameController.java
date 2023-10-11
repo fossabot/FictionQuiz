@@ -16,6 +16,9 @@ import java.util.ResourceBundle;
 
 import io.Output;
 
+/**
+ * クイズの画面表示を管理するクラス
+ */
 public class GameController implements Initializable {
 
     /** クイズゲームの管理データを格納する変数 */
@@ -30,6 +33,7 @@ public class GameController implements Initializable {
     @FXML
     private Label questionLabel;
 
+    /** 選択肢ボタン */
     @FXML
     private Button selectButton1;
 
@@ -43,44 +47,57 @@ public class GameController implements Initializable {
     private Button selectButton4;
 
     ////////////// クイズの判定画面 //////////////
+
+    /** クイズの判定画面 */
     @FXML
     private VBox judgePane;
 
+    /** 回答の正否を表示するラベル */
     @FXML
     private Label judgeLabel;
 
+    /** 問題の解説を表示するラベル */
     @FXML
     private Label commentLabel;
 
+    /** 次の問題に遷移するボタン */
     @FXML
     private Button nextButton;
 
     ////////////// クイズ終了後の結果画面 //////////////
+    /** 結果を表示する画面 */
     @FXML
     private VBox resultPane;
 
+    /** クイズ結果を表示するラベル */
     @FXML
     private Label resultLabel;
 
+    /** クイズ再挑戦ボタン */
     @FXML
     private Button repeatButton;
 
+    /** ジャンル変更ボタン */
     @FXML
     private Button changeCategoryButton;
 
+    /** ゲーム終了ボタン */
     @FXML
     private Button exitButton;
 
+    /**
+     * ゲーム画面の描画初期化とクイズの生成を行う
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         commentLabel.setPrefWidth(Main.getInstance().getPrimaryStage().getWidth() - 100);
-        
+
         // クイズの生成
         GameValues gameValues = Main.getInstance().getGameValues();
         QuizGame quizGame = new QuizGame();
         this.quizGame = quizGame;
 
-        quizGame.generateSakuhinList(Main.getInstance().getDB(), Main.getInstance().getCategoryId());
+        quizGame.generateFictionList(Main.getInstance().getDB(), Main.getInstance().getCategoryId());
 
         quizGame.generateQuiz(gameValues.getProperties());
         if (quizGame.nextQuiz()) {
@@ -90,11 +107,18 @@ public class GameController implements Initializable {
         }
     }
 
-    // クイズゲーム管理データを返す
+    /**
+     * クイズゲーム管理データを返す
+     * @return クイズゲーム管理データ
+     */
     public QuizGame getQuizGame() {
         return quizGame;
     }
 
+    /**
+     * クイズの回答を判定し、判定結果画面を表示する
+     * @param selectNum 回答した選択肢の番号
+     */
     private void judge(int selectNum) {
         if (quizGame.judgeQuiz(selectNum)) {
             judgeLabel.setText("正解");
@@ -110,7 +134,10 @@ public class GameController implements Initializable {
         judgePane.setVisible(true);
     }
 
-    // ゲームペイン画面の表示を更新する
+    /**
+     * ゲーム画面の表示内容を更新する
+     * @param question
+     */
     private void updatePane(Question question) {
         try {
             counterLabel.setText("第 " + quizGame.getCurrentQuestionNum() + " 問");
@@ -124,30 +151,50 @@ public class GameController implements Initializable {
         }
     }
 
+    /**
+     * 選択肢１のボタンが押されたときの動作処理
+     * @param event イベントハンドラ
+     */
     @FXML
     void onSelectBotton1Action(ActionEvent event) {
         this.judge(1);
 
     }
 
+    /**
+     * 選択肢２のボタンが押されたときの動作処理
+     * @param event イベントハンドラ
+     */
     @FXML
     void onSelectBotton2Action(ActionEvent event) {
 
         this.judge(2);
     }
 
+    /**
+     * 選択肢３のボタンが押されたときの動作処理
+     * @param event イベントハンドラ
+     */
     @FXML
     void onSelectBotton3Action(ActionEvent event) {
 
         this.judge(3);
     }
 
+    /**
+     * 選択肢４のボタンが押されたときの動作処理
+     * @param event イベントハンドラ
+     */
     @FXML
     void onSelectBotton4Action(ActionEvent event) {
 
         this.judge(4);
     }
 
+    /**
+     * 次の問題に進むボタンが押されたときの動作処理
+     * @param event イベントハンドラ
+     */
     @FXML
     void onNextBottonAction(ActionEvent event) {
         if (quizGame.nextQuiz()) {
@@ -164,16 +211,28 @@ public class GameController implements Initializable {
         }
     }
 
+    /**
+     * 再挑戦ボタンが押されたときの動作処理
+     * @param event イベントハンドラ
+     */
     @FXML
     void onRepeatButtonAction(ActionEvent event) {
-
+        Main.getInstance().gameView();
     }
 
+    /**
+     * ジャンル選択ボタンが押されたときの動作処理
+     * @param event イベントハンドラ
+     */
     @FXML
     void onChangeCategoryBottonAction(ActionEvent event) {
-
+        Main.getInstance().selectView();
     }
 
+    /**
+     * ゲーム終了ボタンが押されたときの動作処理
+     * @param event イベントハンドラ
+     */
     @FXML
     void onExitBottonAction(ActionEvent event) {
         Main.getInstance().close();

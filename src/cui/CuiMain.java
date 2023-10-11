@@ -52,7 +52,7 @@ public class CuiMain {
             categoryId = selectQuizCategory();
 
             // 問題の生成
-            quizGame.generateSakuhinList(db, categoryId);
+            quizGame.generateFictionList(db, categoryId);
             questionNum = quizGame.generateQuiz(prop);
 
             // クイズの実行

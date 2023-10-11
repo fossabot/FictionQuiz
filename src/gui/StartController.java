@@ -4,6 +4,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 
+/**
+ * ゲーム開始時の画面表示を管理するクラス
+ */
 public class StartController {
 
     @FXML
