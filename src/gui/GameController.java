@@ -158,7 +158,6 @@ public class GameController implements Initializable {
     @FXML
     void onSelectBotton1Action(ActionEvent event) {
         this.judge(1);
-
     }
 
     /**
@@ -167,7 +166,6 @@ public class GameController implements Initializable {
      */
     @FXML
     void onSelectBotton2Action(ActionEvent event) {
-
         this.judge(2);
     }
 
@@ -177,7 +175,6 @@ public class GameController implements Initializable {
      */
     @FXML
     void onSelectBotton3Action(ActionEvent event) {
-
         this.judge(3);
     }
 
@@ -187,7 +184,6 @@ public class GameController implements Initializable {
      */
     @FXML
     void onSelectBotton4Action(ActionEvent event) {
-
         this.judge(4);
     }
 
@@ -218,7 +214,6 @@ public class GameController implements Initializable {
     @FXML
     void onRepeatButtonAction(ActionEvent event) {
         Main.getInstance().showScene("Start");
-        
     }
 
     /**
