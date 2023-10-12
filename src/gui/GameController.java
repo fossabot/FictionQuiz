@@ -217,7 +217,8 @@ public class GameController implements Initializable {
      */
     @FXML
     void onRepeatButtonAction(ActionEvent event) {
-        Main.getInstance().gameView();
+        Main.getInstance().showScene("Start");
+        
     }
 
     /**
@@ -226,7 +227,7 @@ public class GameController implements Initializable {
      */
     @FXML
     void onChangeCategoryBottonAction(ActionEvent event) {
-        Main.getInstance().selectView();
+        Main.getInstance().showScene("SelectCategory");
     }
 
     /**
