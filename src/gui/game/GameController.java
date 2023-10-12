@@ -1,4 +1,4 @@
-package gui;
+package gui.game;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -14,6 +14,7 @@ import quiz.QuizGame;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import gui.Main;
 import io.Output;
 
 /**
@@ -129,7 +130,7 @@ public class GameController implements Initializable {
         }
 
         Question question = quizGame.getCurrentQuestion();
-        commentLabel.setText(String.format("解説：\n「%s」の作者は「%s」です。\n\n", question.getQuestion(), question.getAnswer()));
+        commentLabel.setText(String.format("解説：\n「%s」の作者は「%s」です。", question.getQuestion(), question.getAnswer()));
 
         judgePane.setVisible(true);
     }

@@ -81,6 +81,25 @@ public class Main extends Application {
      * - "Game"           : ゲーム画面
      */
     public void showScene(String eventString) {
+        // 表示するイベント名の格納されているディレクトリ名を付与する
+        switch (eventString) {
+        case "Start": {
+            eventString = "start\\" + eventString;
+            break;
+        }
+        case "SelectCategory": {
+            eventString = "category\\" + eventString;
+            break;
+        }
+        case "Game": {
+            eventString = "game\\" + eventString;
+            break;
+        }
+        default:
+            throw new IllegalArgumentException("Unexpected value: " + eventString);
+        }
+
+        // 画面描画処理を行う
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(eventString + ".fxml"));
             BorderPane root = (BorderPane) fxmlLoader.load();
@@ -95,6 +114,7 @@ public class Main extends Application {
 
         } catch (Exception e) {
             e.printStackTrace();
+            this.close();
         }
     }
 

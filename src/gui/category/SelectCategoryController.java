@@ -1,8 +1,9 @@
-package gui;
+package gui.category;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import gui.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
