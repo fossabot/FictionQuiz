@@ -45,7 +45,8 @@ public class Main extends Application {
         Properties prop = gameValues.getProperties();
         db = new DatabaseSqlite3(gameValues.getResDirPath() + "/" + prop.getDatabaseFile());
 
-        startView();
+        primaryStage.setTitle(prop.getGameTitle());
+        showScene("Start");
     }
 
     public static Main getInstance() {
@@ -73,11 +74,15 @@ public class Main extends Application {
     }
 
     /**
-     * スタート画面の初期描画
+     * 画面描画の処理
+     * @param eventString 表示するイベント名（イベント名はFXMLファイル名に紐づく）
+     * - "Start"          : スタート画面
+     * - "SelectCategory" : ジャンル選択画面
+     * - "Game"           : ゲーム画面
      */
-    public void startView() {
+    public void showScene(String eventString) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Start.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(eventString + ".fxml"));
             BorderPane root = (BorderPane) fxmlLoader.load();
             Properties prop = gameValues.getProperties();
 
@@ -85,7 +90,6 @@ public class Main extends Application {
             Scene scene = new Scene(root, windowDim.width, windowDim.getHeight());
             scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 
-            primaryStage.setTitle(prop.getGameTitle());
             primaryStage.setScene(scene);
             primaryStage.show();
 
@@ -95,46 +99,8 @@ public class Main extends Application {
     }
 
     /**
-     * クイズジャンル選択画面の初期描画
+     * アプリを閉じる時の終了処理
      */
-    public void selectView() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("SelectCategory.fxml"));
-            BorderPane root = (BorderPane) fxmlLoader.load();
-            Properties prop = gameValues.getProperties();
-
-            Dimension windowDim = prop.getMainFrameDim();
-            Scene scene = new Scene(root, windowDim.width, windowDim.getHeight());
-            scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * クイズ画面の初期描画
-     */
-    public void gameView() {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("Game.fxml"));
-            BorderPane root = (BorderPane) fxmlLoader.load();
-            Properties prop = gameValues.getProperties();
-
-            Dimension windowDim = prop.getMainFrameDim();
-            Scene scene = new Scene(root, windowDim.width, windowDim.getHeight());
-            scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    // アプリを終了するときの動作
     public void close() {
         Output.printlnAsInfo("ゲームを終了します。");
 

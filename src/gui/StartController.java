@@ -17,7 +17,7 @@ public class StartController {
 
     @FXML
     void onStartButtonAction(ActionEvent event) {
-        Main.getInstance().selectView();
+        Main.getInstance().showScene("SelectCategory");
     }
 
     @FXML

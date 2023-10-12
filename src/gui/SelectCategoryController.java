@@ -51,6 +51,6 @@ public class SelectCategoryController implements Initializable {
 
         int categoryId = categoryList.getCodeFromEntry(categoryString);
         Main.getInstance().setCategoryId(categoryId);
-        Main.getInstance().gameView();
+        Main.getInstance().showScene("Game");
     }
 }
