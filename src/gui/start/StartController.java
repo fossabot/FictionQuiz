@@ -23,7 +23,7 @@ public class StartController {
 
     @FXML
     void onExitButtonAction(ActionEvent event) {
-        Main.getInstance().close();
+        Main.getInstance().close(0);
     }
 
 }

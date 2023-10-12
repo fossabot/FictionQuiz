@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 
 import java.awt.Dimension;
 
+import gui.game.Game;
 import quiz.GameValues;
 import io.DatabaseSqlite3;
 import io.Output;
@@ -37,7 +38,7 @@ public class Main extends Application {
 
         // ウィンドウを閉じたときの動作を設定
         primaryStage.setOnCloseRequest((WindowEvent event) -> {
-            this.close();
+            this.close(0);
         });
 
         gameValues = new GameValues();
@@ -84,16 +85,17 @@ public class Main extends Application {
         // 表示するイベント名の格納されているディレクトリ名を付与する
         switch (eventString) {
         case "Start": {
-            eventString = "start\\" + eventString;
+            eventString = "start\\" + eventString + ".fxml";
             break;
         }
         case "SelectCategory": {
-            eventString = "category\\" + eventString;
+            eventString = "category\\" + eventString + ".fxml";
             break;
         }
         case "Game": {
-            eventString = "game\\" + eventString;
-            break;
+            Game game = new Game(primaryStage, gameValues);
+            game.showQuizScene();
+            return;
         }
         default:
             throw new IllegalArgumentException("Unexpected value: " + eventString);
@@ -101,7 +103,7 @@ public class Main extends Application {
 
         // 画面描画処理を行う
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(eventString + ".fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(eventString));
             BorderPane root = (BorderPane) fxmlLoader.load();
             Properties prop = gameValues.getProperties();
 
@@ -114,19 +116,20 @@ public class Main extends Application {
 
         } catch (Exception e) {
             e.printStackTrace();
-            this.close();
+            this.close(1);
         }
     }
 
     /**
      * アプリを閉じる時の終了処理
+     * @param code エラーコード（正常時は0、異常時は1）
      */
-    public void close() {
+    public void close(int code) {
         Output.printlnAsInfo("ゲームを終了します。");
 
         db.disconnectDB();
         primaryStage.close();
-        System.exit(0);
+        System.exit(code);
     }
 
 }
