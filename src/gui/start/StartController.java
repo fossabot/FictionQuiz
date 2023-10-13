@@ -1,5 +1,6 @@
-package gui;
+package gui.start;
 
+import gui.Main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -22,7 +23,7 @@ public class StartController {
 
     @FXML
     void onExitButtonAction(ActionEvent event) {
-        Main.getInstance().close();
+        Main.getInstance().close(0);
     }
 
 }
