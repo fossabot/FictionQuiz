@@ -38,9 +38,7 @@ public class ResultController {
      * クイズ画面の表示内容を更新する
      */
     void updatePane(QuizGame quizGame) {
-        quizGame = Game.getGame().getQuizGame();
-        resultLabel.setText(
-                String.format("正解数は %d 問中、 %d 問です。", 
+        resultLabel.setText(String.format("正解数は %d 問中、 %d 問です。", 
                         quizGame.getCurrentQuestionNum(), quizGame.getCurrentAnswerNum()));
     }
     

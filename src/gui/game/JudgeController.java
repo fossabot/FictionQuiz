@@ -5,9 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
-import quiz.GameValues;
 import quiz.Question;
 import quiz.QuizGame;
 
@@ -15,17 +13,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import gui.Main;
-import io.Output;
 
 /**
  * クイズの画面表示を管理するクラス
  */
 public class JudgeController implements Initializable {
-
-    /** クイズゲームの管理データを格納する変数 */
-    private QuizGame quizGame;
-
-    ////////////// クイズの判定画面 //////////////
 
     /** 回答の正否を表示するラベル */
     @FXML
@@ -50,14 +42,10 @@ public class JudgeController implements Initializable {
     /**
      * クイズの回答を判定し、判定結果画面を表示する
      * @param quizGame クイズの情報を持つ変数
-     * @param selectNum 回答した選択肢の番号
+     * @param selectString 選択された回答の文字列
      */
-    public void updatePane(QuizGame quizGame, int selectNum) {
-        if (this.quizGame == null) {
-            this.quizGame = quizGame;
-        }
-
-        if (quizGame.judgeQuiz(selectNum)) {
+    public void updatePane(QuizGame quizGame, String selectString) {
+        if (quizGame.judgeQuiz(selectString)) {
             judgeLabel.setText("正解");
             judgeLabel.setTextFill(Paint.valueOf("GREEN"));
         } else {
@@ -76,12 +64,14 @@ public class JudgeController implements Initializable {
      */
     @FXML
     void onNextBottonAction(ActionEvent event) {
-        if (quizGame.nextQuiz()) {
+        Game instance = Game.getInstance();
+
+        if (instance.getQuizGame().nextQuiz()) {
             //次の問題を表示
-            Game.getGame().showQuizScene();
+            instance.showQuizScene();
         } else {
             // クイズ終了
-            Game.getGame().showResultView();
+            instance.showResultView();
         }
     }
 

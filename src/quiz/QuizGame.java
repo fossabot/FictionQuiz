@@ -18,6 +18,7 @@ import io.Properties;
  *
  */
 public class QuizGame {
+    
     /** 創作物リスト */
     private final List<Fiction> fictionList;
 
@@ -105,9 +106,8 @@ public class QuizGame {
     /**
      * 出題するクイズを作成する
      * @param prop プロパティファイルの情報
-     * @return 作成したクイズの問題数
      */
-    public int generateQuiz(Properties prop) {
+    public void generateQuiz(Properties prop) {
         int questionNum = 0; // 出題する問題数
 
         Output.printlnAsInfo("出題するクイズを生成します。");
@@ -144,8 +144,6 @@ public class QuizGame {
 
         Output.printlnAsInfo("クイズの準備が完了しました。出題数：" + questionNum);
         System.out.println("");
-
-        return questionNum;
     }
 
     /**
@@ -166,22 +164,12 @@ public class QuizGame {
     }
 
     /**
-     * 入力された回答の正否を判定する
-     * @param selectNum 入力された選択肢の番号
+     * 選択された回答の正否を判定する
+     * @param selectString 選択された回答の文字列
      * @return 正解の場合は{@code true}、不正解の場合は{@code false}を返す。
      */
-    public Boolean judgeQuiz(int selectNum) {
-        String answerString;
-
-        try {
-            answerString = currentQuestion.getSelectString(selectNum - 1);
-        } catch (Exception e) {
-            Output.printlnAsError("想定されていない選択肢番号が入力されました。");
-            return false;
-        }
-
-        // 正解か判定する
-        if (answerString.equals(currentQuestion.getAnswer())) {
+    public Boolean judgeQuiz(String selectString) {
+        if (selectString.equals(currentQuestion.getAnswer())) {
             currentAnswerNum++;
             return true;
         } else {
