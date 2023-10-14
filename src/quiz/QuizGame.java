@@ -47,6 +47,14 @@ public class QuizGame {
     }
 
     /**
+     * 作成したゲームの個数を返す
+     * @return 作成したゲームの個数
+     */
+    public int getQuizNum() {
+        return quizQueue.size();
+    }
+    
+    /**
      * 出題した問題数を返す
      * @return 出題した問題数
      */

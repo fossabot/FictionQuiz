@@ -46,7 +46,7 @@ public class CuiMain {
 
         while (true) {
             int categoryId;
-		
+        
             quizGame = new QuizGame();
 
             // クイズジャンルの選択
@@ -57,7 +57,7 @@ public class CuiMain {
             quizGame.generateQuiz(prop);
 
             // クイズの実行
-            for (int i = 0; i < quizGame.getCurrentQuestionNum(); i++) {
+            for (int i = 0; i < quizGame.getQuizNum(); i++) {
                 Output.printlnSeparateLine();
                 nextQuiz();
             }
