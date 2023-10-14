@@ -12,6 +12,7 @@ import quiz.Question;
 import quiz.QuizGame;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import io.Output;
@@ -35,16 +36,7 @@ public class GameController implements Initializable {
 
     /** 選択肢ボタン */
     @FXML
-    private Button selectButton1;
-
-    @FXML
-    private Button selectButton2;
-
-    @FXML
-    private Button selectButton3;
-
-    @FXML
-    private Button selectButton4;
+    private List<Button> selectButtonList;
 
     ////////////// クイズの判定画面 //////////////
 
@@ -140,12 +132,14 @@ public class GameController implements Initializable {
      */
     private void updatePane(Question question) {
         try {
+            // 問題番号と問題のテキストを更新
             counterLabel.setText("第 " + quizGame.getCurrentQuestionNum() + " 問");
             questionLabel.setText(question.getQuestion());
-            selectButton1.setText(question.getSelectString(0));
-            selectButton2.setText(question.getSelectString(1));
-            selectButton3.setText(question.getSelectString(2));
-            selectButton4.setText(question.getSelectString(3));
+            
+            // 選択肢ボタンの表示テキストを更新
+            for (int i = 0; i < selectButtonList.size(); i++) {
+                selectButtonList.get(i).setText(question.getSelectString(i));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

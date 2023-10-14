@@ -43,10 +43,10 @@ public class CuiMain {
         CategoryList categoryList = new CategoryList(db);
         gameValues.setCategoryCodes(categoryList);
 
-        quizGame = new QuizGame(); /////////////// while内部にすべきか？ ///////////////
-
         while (true) {
             int categoryId, questionNum;
+            
+            quizGame = new QuizGame();
 
             // クイズジャンルの選択
             categoryId = selectQuizCategory();
