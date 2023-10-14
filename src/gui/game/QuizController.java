@@ -8,6 +8,7 @@ import quiz.GameValues;
 import quiz.Question;
 import quiz.QuizGame;
 
+import java.util.List;
 import gui.Main;
 
 /**
@@ -25,16 +26,7 @@ public class QuizController {
 
     /** 選択肢ボタン */
     @FXML
-    private Button selectButton1;
-
-    @FXML
-    private Button selectButton2;
-
-    @FXML
-    private Button selectButton3;
-
-    @FXML
-    private Button selectButton4;
+    private List<Button> selectButtonList;
 
     /**
      * ゲーム生成を行う
@@ -63,10 +55,10 @@ public class QuizController {
         try {
             counterLabel.setText("第 " + quizGame.getCurrentQuestionNum() + " 問");
             questionLabel.setText(question.getQuestion());
-            selectButton1.setText(question.getSelectString(0));
-            selectButton2.setText(question.getSelectString(1));
-            selectButton3.setText(question.getSelectString(2));
-            selectButton4.setText(question.getSelectString(3));
+            // 選択肢ボタンの表示テキストを更新
+            for (int i = 0; i < selectButtonList.size(); i++) {
+                selectButtonList.get(i).setText(question.getSelectString(i));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
