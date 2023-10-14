@@ -16,25 +16,38 @@ import io.Output;
 import io.Properties;
 
 public class Main extends Application {
+    
+    /** 自分自身を表すインスタンス */
     public static Main instance;
+
+    /** ゲーム全体で使用するインスタンス */
     private GameValues gameValues;
+    
+    /** ゲームを表示するウィンドウ */
     private Stage primaryStage;
 
+    /** データベースのインスタンス */
     private DatabaseSqlite3 db;
 
-    private int categoryId; //選択したカテゴリーのID番号
+    /** ジャンル選択画面で選択したジャンルのID */
+    private int categoryId;
 
-    public Main() {
-        instance = this;
-    }
-
+    /**
+     * JavaFXによる画面描画を開始する
+     * @param args プログラム実行時の引数
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * 初期化とデータベース接続を行い、最初の画面を表示する
+     * @param primaryStage ゲームを表示するウィンドウ
+     */
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+        Main.instance = this;
 
         // ウィンドウを閉じたときの動作を設定
         primaryStage.setOnCloseRequest((WindowEvent event) -> {
@@ -50,26 +63,50 @@ public class Main extends Application {
         showScene("Start");
     }
 
+    /**
+     * Main自身のインスタンスを返す
+     * @return Mainのインスタンス
+     */
     public static Main getInstance() {
         return instance;
     }
-
+    
+    /**
+     * ゲーム全体で使用するインスタンスを返す
+     * @return ゲーム全体で使用するインスタンス
+     */
     public GameValues getGameValues() {
         return gameValues;
     }
 
+    /**
+     * ゲームを表示するウィンドウを表すインスタンスを返す
+     * @return ゲームを表示するウィンドウを表すインスタンス
+     */
     public Stage getPrimaryStage() {
         return primaryStage;
     }
 
+    /**
+     * データベースのインスタンスを返す
+     * @return データベースのインスタンス
+     */
     public DatabaseSqlite3 getDB() {
         return db;
     }
 
+    /**
+     * 現在選択されているジャンルのIDを返す
+     * @return 現在選択されているジャンルのID
+     */
     public int getCategoryId() {
         return categoryId;
     }
-
+    
+    /**
+     * ジャンルのIDを設定する
+     * @return ジャンルのIDを設定する
+     */
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
     }

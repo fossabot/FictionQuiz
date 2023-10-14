@@ -18,6 +18,7 @@ import io.Properties;
  *
  */
 public class CuiMain {
+
     private static GameValues gameValues;
 
     /** 標準入力のスキャナーを格納する変数 */
@@ -44,8 +45,8 @@ public class CuiMain {
         gameValues.setCategoryCodes(categoryList);
 
         while (true) {
-            int categoryId, questionNum;
-            
+            int categoryId;
+        
             quizGame = new QuizGame();
 
             // クイズジャンルの選択
@@ -53,10 +54,10 @@ public class CuiMain {
 
             // 問題の生成
             quizGame.generateFictionList(db, categoryId);
-            questionNum = quizGame.generateQuiz(prop);
+            quizGame.generateQuiz(prop);
 
             // クイズの実行
-            for (int i = 0; i < questionNum; i++) {
+            for (int i = 0; i < quizGame.getQuizNum(); i++) {
                 Output.printlnSeparateLine();
                 nextQuiz();
             }
@@ -137,7 +138,7 @@ public class CuiMain {
             System.out.printf("「%s」の作者は誰でしょう？\n", question.getQuestion());
 
             for (int i = 0; i < selectNum; i++) {
-                System.out.printf("%2d. %s\n", i + 1, question.getSelectString(i));
+                Output.printlnSelectEntry(i + 1, question.getSelectString(i));
             }
 
             System.out.println("");
@@ -155,7 +156,7 @@ public class CuiMain {
         }
 
         // 正答判定
-        if (quizGame.judgeQuiz(inputNum)) {
+        if (quizGame.judgeQuiz(question.getSelectString(inputNum - 1))) {
             Output.printlnAsCollect();
         } else {
             Output.printlnAsIncollect();

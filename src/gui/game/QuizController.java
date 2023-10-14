@@ -2,30 +2,19 @@ package gui.game;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
 import quiz.GameValues;
 import quiz.Question;
 import quiz.QuizGame;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
-
 import gui.Main;
-import io.Output;
 
 /**
  * クイズの画面表示を管理するクラス
  */
 public class QuizController {
-
-//    /** クイズゲームの管理データを格納する変数 */
-//    private QuizGame quizGame;
 
     /** 出題した回数（第X問）を表示するラベル */
     @FXML
@@ -81,7 +70,8 @@ public class QuizController {
      */
     @FXML
     void onSelectBotton1Action(ActionEvent event) {
-        Game.getGame().showJudgeView(1);
+        Question question = Game.getInstance().getQuizGame().getCurrentQuestion();
+        Game.getInstance().showJudgeView(question.getSelectString(0));
     }
 
     /**
@@ -90,7 +80,8 @@ public class QuizController {
      */
     @FXML
     void onSelectBotton2Action(ActionEvent event) {
-        Game.getGame().showJudgeView(2);
+        Question question = Game.getInstance().getQuizGame().getCurrentQuestion();
+        Game.getInstance().showJudgeView(question.getSelectString(1));
     }
 
     /**
@@ -99,7 +90,8 @@ public class QuizController {
      */
     @FXML
     void onSelectBotton3Action(ActionEvent event) {
-        Game.getGame().showJudgeView(3);
+        Question question = Game.getInstance().getQuizGame().getCurrentQuestion();
+        Game.getInstance().showJudgeView(question.getSelectString(2));
     }
 
     /**
@@ -108,7 +100,8 @@ public class QuizController {
      */
     @FXML
     void onSelectBotton4Action(ActionEvent event) {
-        Game.getGame().showJudgeView(4);
+        Question question = Game.getInstance().getQuizGame().getCurrentQuestion();
+        Game.getInstance().showJudgeView(question.getSelectString(3));
     }
 
 }

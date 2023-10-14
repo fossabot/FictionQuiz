@@ -9,25 +9,37 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import quiz.GameValues;
-import quiz.Question;
 import quiz.QuizGame;
 
 /**
  * クイズの流れを管理するクラス
  */
 public class Game {
+    
+    /** 自分自身を表すインスタンス */
     private static Game instance = null;
 
-    private final Stage primaryStage;
+    /** ゲーム全体で使用するインスタンス */
     private final GameValues gameValues;
+    
+    /** ゲームを表示するウィンドウ */
+    private final Stage primaryStage;
 
     /** クイズゲームの管理データを格納する変数 */
     private QuizGame quizGame;
 
+    /** クイズ出題画面のシーンを表すインスタンス */
     private SceneInfo quizSceneInfo = null;
+    
+    /** 判定画面のシーンを表すインスタンス */
     private SceneInfo judgeSceneInfo = null;
+    
+    /** 結果画面のシーンを表すインスタンス */
     private SceneInfo resultSceneInfo = null;
 
+    /**
+     * シーンを表示する上で必要なインスタンスをまとめて保持する内部クラス
+     */
     class SceneInfo {
         private final FXMLLoader fxmlLoader;
         private final BorderPane rootPane;
@@ -52,22 +64,36 @@ public class Game {
         }
     }
 
-    // クイズゲームの開始（準備）
+    /**
+     * クイズを出題する前処理
+     * @param primaryStage ゲームを表示するウィンドウ
+     * @param gameValues ゲーム全体で使用するインスタンス
+     */
     public Game(Stage primaryStage, GameValues gameValues) {
         Game.instance = this;
         this.primaryStage = primaryStage;
         this.gameValues = gameValues;
     }
-
-    static Game getGame() {
+    
+    /**
+     * Game自身のインスタンスを返す
+     * @return Gameのインスタンス
+     */
+    static Game getInstance() {
         return instance;
     }
 
+    /**
+     * QuizGameのインスタンスを返す
+     * @return QuizGameのインスタンス
+     */
     public QuizGame getQuizGame() {
         return quizGame;
     }
 
-    // クイズ画面を表示
+    /**
+     * クイズ出題画面の描画を行う
+     */
     public void showQuizScene() {
         if (quizSceneInfo == null) {
             quizSceneInfo = generateScene("Quiz");
@@ -85,22 +111,27 @@ public class Game {
         primaryStage.show();
     }
 
-    // 判定画面を表示
-    public void showJudgeView(int i) {
+    /**
+     * 判定画面の描画を行う
+     * @param slectString 選択した回答の文字列
+     */
+    void showJudgeView(String slectString) {
         if (judgeSceneInfo == null) {
             judgeSceneInfo = generateScene("Judge");
         }
 
         // 回答の正否を判定し、判定画面を描写する。
         JudgeController judgeController = (JudgeController) judgeSceneInfo.getFxmlLoader().getController();
-        judgeController.updatePane(quizGame, i);
+        judgeController.updatePane(quizGame, slectString);
         setPaneVisible("Judge");
-        primaryStage.setScene(judgeSceneInfo.getScene());      
+        primaryStage.setScene(judgeSceneInfo.getScene());
         primaryStage.show();
     }
 
-    // 結果画面を表示
-    public void showResultView() {
+    /**
+     * 結果画面の描画を行う
+     */
+    void showResultView() {
         if (resultSceneInfo == null) {
             resultSceneInfo = generateScene("Result");
         }
@@ -126,9 +157,6 @@ public class Game {
         BorderPane root = null;
         Scene scene = null;
         Properties prop = gameValues.getProperties();
-
-        //        // 表示するイベント名の格納されているディレクトリ名を付与する
-        //        eventString = "gui\\game\\" + eventString;
 
         try {
             String string = eventString + ".fxml";
@@ -158,7 +186,7 @@ public class Game {
         Boolean isQuiz = false;
         Boolean isJudge = false;
         Boolean isResult = false;
-        
+
         switch (str) {
         case "Quiz": {
             isQuiz = true;
@@ -175,8 +203,7 @@ public class Game {
         default:
             throw new IllegalArgumentException("Unexpected value: " + str);
         }
-        
-        
+
         if (quizSceneInfo != null) {
             quizSceneInfo.getRootPane().setVisible(isQuiz);
         }
