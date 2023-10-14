@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import java.util.ArrayList?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.game.QuizController">
    <center>
@@ -52,6 +53,14 @@
                   <Button fx:id="selectButton2" layoutX="10.0" layoutY="47.0" mnemonicParsing="false" onAction="#onSelectBotton2Action" prefHeight="100.0" prefWidth="300.0" style="-fx-font-size: 24;" text="選択肢2" wrapText="true" GridPane.columnIndex="1" />
                   <Button fx:id="selectButton3" layoutX="10.0" layoutY="47.0" mnemonicParsing="false" onAction="#onSelectBotton3Action" prefHeight="100.0" prefWidth="300.0" style="-fx-font-size: 24;" text="選択肢3" wrapText="true" GridPane.rowIndex="1" />
                   <Button fx:id="selectButton4" layoutX="10.0" layoutY="47.0" mnemonicParsing="false" onAction="#onSelectBotton4Action" prefHeight="100.0" prefWidth="300.0" style="-fx-font-size: 24;" text="選択肢4" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <fx:define>
+                     <ArrayList fx:id="selectButtonList">
+                        <fx:reference source="selectButton1" />
+                        <fx:reference source="selectButton2" />
+                        <fx:reference source="selectButton3" />
+                        <fx:reference source="selectButton4" />
+                     </ArrayList>
+                  </fx:define>
                </children>
                <padding>
                   <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
