@@ -9,6 +9,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import java.util.ArrayList?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SelectCategoryController">
    <center>
@@ -23,8 +24,22 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="categoryButton1" mnemonicParsing="false" onAction="#onCategoryButtonAction" prefHeight="49.0" prefWidth="260.0" text="Button" />
-            <Button fx:id="categoryButton2" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onCategoryButtonAction" prefHeight="49.0" prefWidth="260.0" text="Button" GridPane.columnIndex="1" />
+            <Button fx:id="categoryButton1" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onCategoryButtonAction" prefHeight="60.0" prefWidth="260.0" text="Button" />
+            <Button fx:id="categoryButton2" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onCategoryButtonAction" prefHeight="60.0" prefWidth="260.0" text="Button" GridPane.columnIndex="1" />
+            <Button fx:id="categoryButton3" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onCategoryButtonAction" prefHeight="60.0" prefWidth="260.0" text="Button" GridPane.rowIndex="1" />
+            <Button fx:id="categoryButton4" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onCategoryButtonAction" prefHeight="60.0" prefWidth="260.0" text="Button" GridPane.rowIndex="1" GridPane.columnIndex="1" />
+            <Button fx:id="categoryButton5" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onCategoryButtonAction" prefHeight="60.0" prefWidth="260.0" text="Button" GridPane.rowIndex="2" />
+            <Button fx:id="categoryButton6" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#onCategoryButtonAction" prefHeight="60.0" prefWidth="260.0" text="Button" GridPane.rowIndex="2" GridPane.columnIndex="1" />
+            <fx:define>
+                <ArrayList fx:id="categoryButtonList">
+                    <fx:reference source="categoryButton1" />
+                    <fx:reference source="categoryButton2" />
+                    <fx:reference source="categoryButton3" />
+                    <fx:reference source="categoryButton4" />
+                    <fx:reference source="categoryButton5" />
+                    <fx:reference source="categoryButton6" />
+                </ArrayList>
+            </fx:define>
          </children>
          <BorderPane.margin>
             <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />

@@ -1,6 +1,7 @@
 package gui;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -15,13 +16,12 @@ import quiz.GameValues;
  */
 public class SelectCategoryController implements Initializable {
 
+    /* ジャンル選択ボタンの最大数（FXMLで作成しているボタン数に合わせるため、GUI版のみ表示数を制限をしている） */
+    private int MAX_CATEGORY_BUTTON_NUM = 6;
+    
     /** ジャンルを表すボタン */
     @FXML
-    private Button categoryButton1;
-
-    /** ジャンルを表すボタン */
-    @FXML
-    private Button categoryButton2;
+    private List<Button> categoryButtonList;
 
     /**
      * クイズのジャンルリストを生成し、画面表示の初期化を行う
@@ -33,10 +33,15 @@ public class SelectCategoryController implements Initializable {
         GameValues gameValues = Main.getInstance().getGameValues();
         gameValues.setCategoryCodes(categoryList);
 
-        categoryButton1.setText(categoryList.getEntry(0));
-        categoryButton1.setVisible(true);
-        categoryButton2.setText(categoryList.getEntry(1));
-        categoryButton2.setVisible(true);
+        // カテゴリー名があるものはボタンを表示、ないものはボタンを非表示にする
+        for (int i = 0; i < MAX_CATEGORY_BUTTON_NUM; i++) {
+            if (i < categoryList.size()) {
+                categoryButtonList.get(i).setText(categoryList.getEntry(i));
+                categoryButtonList.get(i).setVisible(true);
+            } else {
+                categoryButtonList.get(i).setVisible(false);
+            }
+        }
     }
 
     /**
