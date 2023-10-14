@@ -11,7 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import java.util.ArrayList?>
 
-<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.SelectCategoryController">
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.category.SelectCategoryController">
    <center>
       <GridPane alignment="CENTER" hgap="20.0" vgap="20.0" BorderPane.alignment="CENTER">
         <columnConstraints>
